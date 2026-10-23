@@ -119,6 +119,8 @@ def main():
             raise RuntimeError('Linux executable is not fully static')
         (logs/'linkage.log').write_text(headers+dynamic)
         # Prove it runs with neither a JVM nor a dynamic loader present.
+        (ROOT/'dist/licenses').mkdir(exist_ok=True)
+        shutil.copy2(ROOT/'upstream/LICENSE', ROOT/'dist/licenses/tlaplus-LICENSE')
         run(['docker', 'build', '-f', 'Dockerfile.scratch', '-t', 'tlc-scratch', '.'])
         run(['docker', 'run', '--rm', '--tmpfs', '/tmp:rw,mode=1777', '-v',
              f'{ROOT}/tests:/models', 'tlc-scratch', '-Xmx512m', '-workers', '2',

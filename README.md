@@ -1,4 +1,6 @@
-# TLC: GraalVM + musl 完全静的バイナリ
+# tlc-static
+
+GraalVM + musl でビルドした TLC の完全静的バイナリ。
 
 Linux x86_64 向けの TLC (`tlc2.TLC`) です。Java のインストールも JAR の配置も不要です。標準 TLA+ モジュールは実行ファイルに埋め込まれています。
 
@@ -58,3 +60,7 @@ Native Image はビルド時に Java クラスを確定します。実行後に�
 分散 TLC、メール送信、REPL、チェックポイント回復、大規模モデルの性能は未検証です。Serial GC のため JVM の Parallel GC と性能特性が異なります。
 
 再配布時は `licenses/` を実行ファイルに添付してください。
+
+## ライセンス
+
+ビルド用コードは MIT License。TLA+ 本体のライセンスは [TLAplus-LICENSE.txt](TLAplus-LICENSE.txt)、配布バイナリの依存ライセンスはアーカイブ内の `licenses/` を参照してください。

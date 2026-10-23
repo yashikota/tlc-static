@@ -1,0 +1,6 @@
+*
+!dist/
+dist/*
+!dist/tlc
+!dist/licenses/
+!dist/licenses/**

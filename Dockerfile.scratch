@@ -1,0 +1,6 @@
+FROM scratch
+COPY dist/tlc /tlc
+COPY dist/licenses /licenses
+WORKDIR /models
+USER 1000:1000
+ENTRYPOINT ["/tlc"]

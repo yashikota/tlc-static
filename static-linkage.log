@@ -1,0 +1,27 @@
+dist/tlc: ELF 64-bit LSB executable, x86-64, version 1 (SYSV), statically linked, stripped
+
+Elf file type is EXEC (Executable file)
+Entry point 0x410044
+There are 4 program headers, starting at offset 64
+
+Program Headers:
+  Type           Offset             VirtAddr           PhysAddr
+                 FileSiz            MemSiz              Flags  Align
+  LOAD           0x0000000000000000 0x0000000000400000 0x0000000000400000
+                 0x0000000001467d54 0x0000000001467d54  R E    0x200000
+  LOAD           0x00000000014684c0 0x0000000001a684c0 0x0000000001a684c0
+                 0x0000000001447b40 0x0000000001449350  RW     0x200000
+  GNU_STACK      0x0000000000000000 0x0000000000000000 0x0000000000000000
+                 0x0000000000000000 0x0000000000000000  RW     0x10
+  GNU_RELRO      0x00000000014684c0 0x0000000001a684c0 0x0000000001a684c0
+                 0x0000000000000b40 0x0000000000000b40  R      0x1
+
+ Section to Segment mapping:
+  Segment Sections...
+   00     .init .text .fini .rodata .eh_frame 
+   01     .ctors .dtors .data.rel.ro .data .svm_heap .bss 
+   02     
+   03     .ctors .dtors .data.rel.ro 
+
+There is no dynamic section in this file.
+	not a dynamic executable

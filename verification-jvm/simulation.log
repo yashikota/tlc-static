@@ -1,0 +1,28 @@
+TLC2 Version 2026.10.23.130846 (rev: 606dfa4)
+Warning: Please run the Java VM, which executes TLC with a throughput optimized garbage collector, by passing the "-XX:+UseParallelGC" property.
+(Use the -nowarning option to disable this warning.)
+Running Random Simulation with seed 1 with 2 workers on 3 cores with 512MB heap and 64MB offheap memory [pid: 1] (Linux 6.18.55 amd64, GraalVM Community 25.0.2 64bit).
+Parsing file /work/tests/Counter.tla
+Parsing file /tmp/tlc-4772377310831942501/Integers.tla (jar:file:/work/dist/tla2tools.jar!/tla2sany/StandardModules/Integers.tla)
+Parsing file /tmp/tlc-4772377310831942501/Sequences.tla (jar:file:/work/dist/tla2tools.jar!/tla2sany/StandardModules/Sequences.tla)
+Parsing file /tmp/tlc-4772377310831942501/FiniteSets.tla (jar:file:/work/dist/tla2tools.jar!/tla2sany/StandardModules/FiniteSets.tla)
+Parsing file /tmp/tlc-4772377310831942501/TLC.tla (jar:file:/work/dist/tla2tools.jar!/tla2sany/StandardModules/TLC.tla)
+Parsing file /tmp/tlc-4772377310831942501/Bags.tla (jar:file:/work/dist/tla2tools.jar!/tla2sany/StandardModules/Bags.tla)
+Parsing file /tmp/tlc-4772377310831942501/Naturals.tla (jar:file:/work/dist/tla2tools.jar!/tla2sany/StandardModules/Naturals.tla)
+Semantic processing of module Naturals
+Semantic processing of module Integers
+Semantic processing of module Sequences
+Semantic processing of module FiniteSets
+Semantic processing of module TLC
+Semantic processing of module Bags
+Semantic processing of module Counter
+Linting of module Counter
+Starting... (2026-10-23 13:16:16)
+Warning: The invariant StandardModules is a constant-level formula (i.e., it contains no variables, primes, or temporal operators) and evaluates to TRUE. To assert constant-level formulas in your spec, use ASSUME ConstInv. If you optionally want to give the assumption a name, write ASSUME YourAssumption == ConstInv instead. See https://explain.tlapl.us/assumptions-and-invariants for additional details.
+Implied-temporal checking--satisfiability problem has 1 branches.
+Computed 1 initial states...
+Finished computing initial states: 1 distinct state generated at 2026-10-23 13:16:16.
+Progress: 401 states checked, 20 traces generated (trace length: mean=15, var(x)=35, sd=6)
+The number of states generated: 401
+Simulation using seed 1 and aril 0
+Finished in 00s at (2026-10-23 13:16:17)

@@ -1,0 +1,410 @@
+[
+  {
+    "name": "tlc2.module.AnySet",
+    "allDeclaredMethods": true,
+    "allDeclaredConstructors": true,
+    "allDeclaredFields": true
+  },
+  {
+    "name": "tlc2.module.Bags",
+    "allDeclaredMethods": true,
+    "allDeclaredConstructors": true,
+    "allDeclaredFields": true
+  },
+  {
+    "name": "tlc2.module.BuiltInModuleHelper",
+    "allDeclaredMethods": true,
+    "allDeclaredConstructors": true,
+    "allDeclaredFields": true
+  },
+  {
+    "name": "tlc2.module.FiniteSets",
+    "allDeclaredMethods": true,
+    "allDeclaredConstructors": true,
+    "allDeclaredFields": true
+  },
+  {
+    "name": "tlc2.module.Integers",
+    "allDeclaredMethods": true,
+    "allDeclaredConstructors": true,
+    "allDeclaredFields": true
+  },
+  {
+    "name": "tlc2.module.Json",
+    "allDeclaredMethods": true,
+    "allDeclaredConstructors": true,
+    "allDeclaredFields": true
+  },
+  {
+    "name": "tlc2.module.Naturals",
+    "allDeclaredMethods": true,
+    "allDeclaredConstructors": true,
+    "allDeclaredFields": true
+  },
+  {
+    "name": "tlc2.module.Randomization",
+    "allDeclaredMethods": true,
+    "allDeclaredConstructors": true,
+    "allDeclaredFields": true
+  },
+  {
+    "name": "tlc2.module.Sequences",
+    "allDeclaredMethods": true,
+    "allDeclaredConstructors": true,
+    "allDeclaredFields": true
+  },
+  {
+    "name": "tlc2.module.Strings",
+    "allDeclaredMethods": true,
+    "allDeclaredConstructors": true,
+    "allDeclaredFields": true
+  },
+  {
+    "name": "tlc2.module.TLC",
+    "allDeclaredMethods": true,
+    "allDeclaredConstructors": true,
+    "allDeclaredFields": true
+  },
+  {
+    "name": "tlc2.module.TLCBuiltInOverrides",
+    "allDeclaredMethods": true,
+    "allDeclaredConstructors": true,
+    "allDeclaredFields": true
+  },
+  {
+    "name": "tlc2.module.TLCEval",
+    "allDeclaredMethods": true,
+    "allDeclaredConstructors": true,
+    "allDeclaredFields": true
+  },
+  {
+    "name": "tlc2.module.TLCExt",
+    "allDeclaredMethods": true,
+    "allDeclaredConstructors": true,
+    "allDeclaredFields": true
+  },
+  {
+    "name": "tlc2.module.TLCGetSet",
+    "allDeclaredMethods": true,
+    "allDeclaredConstructors": true,
+    "allDeclaredFields": true
+  },
+  {
+    "name": "tlc2.module.TransitiveClosure",
+    "allDeclaredMethods": true,
+    "allDeclaredConstructors": true,
+    "allDeclaredFields": true
+  },
+  {
+    "name": "tlc2.module._JsonTrace",
+    "allDeclaredMethods": true,
+    "allDeclaredConstructors": true,
+    "allDeclaredFields": true
+  },
+  {
+    "name": "tlc2.module._Possible",
+    "allDeclaredMethods": true,
+    "allDeclaredConstructors": true,
+    "allDeclaredFields": true
+  },
+  {
+    "name": "tlc2.module._TLCTrace",
+    "allDeclaredMethods": true,
+    "allDeclaredConstructors": true,
+    "allDeclaredFields": true
+  },
+  {
+    "name": "tlc2.overrides.Evaluation",
+    "allDeclaredMethods": true,
+    "allDeclaredConstructors": true,
+    "allDeclaredFields": true
+  },
+  {
+    "name": "tlc2.overrides.ITLCOverrides",
+    "allDeclaredMethods": true,
+    "allDeclaredConstructors": true,
+    "allDeclaredFields": true
+  },
+  {
+    "name": "tlc2.overrides.TLAPlusCallable",
+    "allDeclaredMethods": true,
+    "allDeclaredConstructors": true,
+    "allDeclaredFields": true
+  },
+  {
+    "name": "tlc2.overrides.TLAPlusOperator",
+    "allDeclaredMethods": true,
+    "allDeclaredConstructors": true,
+    "allDeclaredFields": true
+  },
+  {
+    "name": "tlc2.tool.fp.DiskFPSet",
+    "allDeclaredMethods": true,
+    "allDeclaredConstructors": true,
+    "allDeclaredFields": true
+  },
+  {
+    "name": "tlc2.tool.fp.DiskFPSet$Flusher",
+    "allDeclaredMethods": true,
+    "allDeclaredConstructors": true,
+    "allDeclaredFields": true
+  },
+  {
+    "name": "tlc2.tool.fp.FPSet",
+    "allDeclaredMethods": true,
+    "allDeclaredConstructors": true,
+    "allDeclaredFields": true
+  },
+  {
+    "name": "tlc2.tool.fp.FPSetConfiguration",
+    "allDeclaredMethods": true,
+    "allDeclaredConstructors": true,
+    "allDeclaredFields": true
+  },
+  {
+    "name": "tlc2.tool.fp.FPSetFactory",
+    "allDeclaredMethods": true,
+    "allDeclaredConstructors": true,
+    "allDeclaredFields": true
+  },
+  {
+    "name": "tlc2.tool.fp.FPSetFactory$1",
+    "allDeclaredMethods": true,
+    "allDeclaredConstructors": true,
+    "allDeclaredFields": true
+  },
+  {
+    "name": "tlc2.tool.fp.FPSetStatistic",
+    "allDeclaredMethods": true,
+    "allDeclaredConstructors": true,
+    "allDeclaredFields": true
+  },
+  {
+    "name": "tlc2.tool.fp.HeapBasedDiskFPSet",
+    "allDeclaredMethods": true,
+    "allDeclaredConstructors": true,
+    "allDeclaredFields": true
+  },
+  {
+    "name": "tlc2.tool.fp.LSBDiskFPSet",
+    "allDeclaredMethods": true,
+    "allDeclaredConstructors": true,
+    "allDeclaredFields": true
+  },
+  {
+    "name": "tlc2.tool.fp.LSBDiskFPSet$LSBFlusher",
+    "allDeclaredMethods": true,
+    "allDeclaredConstructors": true,
+    "allDeclaredFields": true
+  },
+  {
+    "name": "tlc2.tool.fp.LongArray",
+    "allDeclaredMethods": true,
+    "allDeclaredConstructors": true,
+    "allDeclaredFields": true
+  },
+  {
+    "name": "tlc2.tool.fp.LongArray$1",
+    "allDeclaredMethods": true,
+    "allDeclaredConstructors": true,
+    "allDeclaredFields": true
+  },
+  {
+    "name": "tlc2.tool.fp.LongArrays",
+    "allDeclaredMethods": true,
+    "allDeclaredConstructors": true,
+    "allDeclaredFields": true
+  },
+  {
+    "name": "tlc2.tool.fp.LongArrays$LongComparator",
+    "allDeclaredMethods": true,
+    "allDeclaredConstructors": true,
+    "allDeclaredFields": true
+  },
+  {
+    "name": "tlc2.tool.fp.MSBDiskFPSet",
+    "allDeclaredMethods": true,
+    "allDeclaredConstructors": true,
+    "allDeclaredFields": true
+  },
+  {
+    "name": "tlc2.tool.fp.MSBDiskFPSet$MSBFlusher",
+    "allDeclaredMethods": true,
+    "allDeclaredConstructors": true,
+    "allDeclaredFields": true
+  },
+  {
+    "name": "tlc2.tool.fp.MSBDiskFPSet$TLCIterator",
+    "allDeclaredMethods": true,
+    "allDeclaredConstructors": true,
+    "allDeclaredFields": true
+  },
+  {
+    "name": "tlc2.tool.fp.MemFPSet",
+    "allDeclaredMethods": true,
+    "allDeclaredConstructors": true,
+    "allDeclaredFields": true
+  },
+  {
+    "name": "tlc2.tool.fp.MemFPSet1",
+    "allDeclaredMethods": true,
+    "allDeclaredConstructors": true,
+    "allDeclaredFields": true
+  },
+  {
+    "name": "tlc2.tool.fp.MemFPSet2",
+    "allDeclaredMethods": true,
+    "allDeclaredConstructors": true,
+    "allDeclaredFields": true
+  },
+  {
+    "name": "tlc2.tool.fp.MultiFPSet",
+    "allDeclaredMethods": true,
+    "allDeclaredConstructors": true,
+    "allDeclaredFields": true
+  },
+  {
+    "name": "tlc2.tool.fp.MultiFPSetConfiguration",
+    "allDeclaredMethods": true,
+    "allDeclaredConstructors": true,
+    "allDeclaredFields": true
+  },
+  {
+    "name": "tlc2.tool.fp.NonCheckpointableDiskFPSet",
+    "allDeclaredMethods": true,
+    "allDeclaredConstructors": true,
+    "allDeclaredFields": true
+  },
+  {
+    "name": "tlc2.tool.fp.NoopFPSet",
+    "allDeclaredMethods": true,
+    "allDeclaredConstructors": true,
+    "allDeclaredFields": true
+  },
+  {
+    "name": "tlc2.tool.fp.OffHeapDiskFPSet",
+    "allDeclaredMethods": true,
+    "allDeclaredConstructors": true,
+    "allDeclaredFields": true
+  },
+  {
+    "name": "tlc2.tool.fp.OffHeapDiskFPSet$1",
+    "allDeclaredMethods": true,
+    "allDeclaredConstructors": true,
+    "allDeclaredFields": true
+  },
+  {
+    "name": "tlc2.tool.fp.OffHeapDiskFPSet$2",
+    "allDeclaredMethods": true,
+    "allDeclaredConstructors": true,
+    "allDeclaredFields": true
+  },
+  {
+    "name": "tlc2.tool.fp.OffHeapDiskFPSet$3",
+    "allDeclaredMethods": true,
+    "allDeclaredConstructors": true,
+    "allDeclaredFields": true
+  },
+  {
+    "name": "tlc2.tool.fp.OffHeapDiskFPSet$BitshiftingIndexer",
+    "allDeclaredMethods": true,
+    "allDeclaredConstructors": true,
+    "allDeclaredFields": true
+  },
+  {
+    "name": "tlc2.tool.fp.OffHeapDiskFPSet$ConcurrentOffHeapMSBFlusher",
+    "allDeclaredMethods": true,
+    "allDeclaredConstructors": true,
+    "allDeclaredFields": true
+  },
+  {
+    "name": "tlc2.tool.fp.OffHeapDiskFPSet$ConcurrentOffHeapMSBFlusher$1",
+    "allDeclaredMethods": true,
+    "allDeclaredConstructors": true,
+    "allDeclaredFields": true
+  },
+  {
+    "name": "tlc2.tool.fp.OffHeapDiskFPSet$ConcurrentOffHeapMSBFlusher$2",
+    "allDeclaredMethods": true,
+    "allDeclaredConstructors": true,
+    "allDeclaredFields": true
+  },
+  {
+    "name": "tlc2.tool.fp.OffHeapDiskFPSet$ConcurrentOffHeapMSBFlusher$3",
+    "allDeclaredMethods": true,
+    "allDeclaredConstructors": true,
+    "allDeclaredFields": true
+  },
+  {
+    "name": "tlc2.tool.fp.OffHeapDiskFPSet$ConcurrentOffHeapMSBFlusher$4",
+    "allDeclaredMethods": true,
+    "allDeclaredConstructors": true,
+    "allDeclaredFields": true
+  },
+  {
+    "name": "tlc2.tool.fp.OffHeapDiskFPSet$ConcurrentOffHeapMSBFlusher$Result",
+    "allDeclaredMethods": true,
+    "allDeclaredConstructors": true,
+    "allDeclaredFields": true
+  },
+  {
+    "name": "tlc2.tool.fp.OffHeapDiskFPSet$Indexer",
+    "allDeclaredMethods": true,
+    "allDeclaredConstructors": true,
+    "allDeclaredFields": true
+  },
+  {
+    "name": "tlc2.tool.fp.OffHeapDiskFPSet$InfinitePrecisionIndexer",
+    "allDeclaredMethods": true,
+    "allDeclaredConstructors": true,
+    "allDeclaredFields": true
+  },
+  {
+    "name": "tlc2.tool.fp.OffHeapDiskFPSet$InfinitePrecisionMult1024Indexer",
+    "allDeclaredMethods": true,
+    "allDeclaredConstructors": true,
+    "allDeclaredFields": true
+  },
+  {
+    "name": "tlc2.tool.fp.OffHeapDiskFPSet$Iterator",
+    "allDeclaredMethods": true,
+    "allDeclaredConstructors": true,
+    "allDeclaredFields": true
+  },
+  {
+    "name": "tlc2.tool.fp.OffHeapDiskFPSet$Iterator$WRAP",
+    "allDeclaredMethods": true,
+    "allDeclaredConstructors": true,
+    "allDeclaredFields": true
+  },
+  {
+    "name": "tlc2.tool.fp.OffHeapDiskFPSet$Mult1024Indexer",
+    "allDeclaredMethods": true,
+    "allDeclaredConstructors": true,
+    "allDeclaredFields": true
+  },
+  {
+    "name": "tlc2.tool.fp.OffHeapDiskFPSet$OffHeapMSBFlusher",
+    "allDeclaredMethods": true,
+    "allDeclaredConstructors": true,
+    "allDeclaredFields": true
+  },
+  {
+    "name": "tlc2.tool.fp.OffHeapDiskFPSet$OffHeapRuntimeException",
+    "allDeclaredMethods": true,
+    "allDeclaredConstructors": true,
+    "allDeclaredFields": true
+  },
+  {
+    "name": "tlc2.tool.fp.OffHeapDiskFPSet$OffHeapSynchronizer",
+    "allDeclaredMethods": true,
+    "allDeclaredConstructors": true,
+    "allDeclaredFields": true
+  },
+  {
+    "name": "tlc2.tool.fp.OffHeapDiskFPSet$OffHeapSynchronizer$1",
+    "allDeclaredMethods": true,
+    "allDeclaredConstructors": true,
+    "allDeclaredFields": true
+  }
+]

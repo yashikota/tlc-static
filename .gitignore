@@ -1,0 +1,9 @@
+/upstream/
+/tools/
+/dist/
+/.buildx/
+/__pycache__/
+/tests/states/
+/verification/*.jfr
+/package.log
+/scratch-build.log

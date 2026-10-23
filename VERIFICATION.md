@@ -1,30 +1,36 @@
-# Verification
+# Release verification
 
-Target: Linux x86_64, GraalVM CE 25.0.2, musl, TLC source commit
-606dfa48298a1b36c4ee4625c705041c35bd7393.
+Each native build uses TLA+ source commit 606dfa48298a1b36c4ee4625c705041c35bd7393.
+The same JAR is tested on the JVM before building the native executable.
 
-The same source-built JAR is used for the JVM baseline and native build.
-
-| Case | Expected result |
+| Case | Required result |
 | --- | --- |
-| Counter, 2 workers, WF liveness and standard modules | Exit 0; 5 generated / 4 distinct states |
+| Counter, 2 workers, WF liveness, standard modules | Exit 0; 5 generated / 4 distinct states |
 | Invalid invariant | Exit 12; counterexample |
 | Invalid eventual property | Exit 13; cyclic counterexample |
 | Simulation, 10 traces, depth 20 | Exit 0 |
 | DFID, 1 worker | Exit 0 |
-| Upstream Bakery, 2 processes, bounded numbers, mutual exclusion | Exit 0; 1183 generated / 668 distinct states |
+| Bakery, 2 processes, bounded numbers, mutual exclusion | Exit 0; 1183 generated / 668 distinct states |
 
-Bakery uses an included safety configuration, with no upstream test-only
-`_POSSIBLE` counters or postcondition. See `tests/Bakery.cfg`.
+Bakery uses the included safety configuration, without test-only `_POSSIBLE`
+counters or postconditions. Each build must pass all cases, and JVM/native
+results must match, before it can be uploaded for publication.
 
-The native executable is additionally checked using `file`, `readelf`, `ldd`,
-and by running Counter in a `FROM scratch` container as UID 1000, with a
-writable `/tmp` and model directory. No JRE, JAR, libc shared object, or dynamic
-loader is copied into the runtime image.
+Linux amd64 and arm64 must additionally have no ELF INTERP or NEEDED entries,
+and must run Counter in a FROM scratch container as UID 1000 with writable
+/tmp and a model directory. No JVM, libc shared library, or dynamic loader is
+copied into that image. macOS dependencies are recorded with otool; Windows
+imports are recorded with dumpbin. These two operating systems use system
+libraries and are not described as fully static.
 
-All six cases passed for both JVM and native execution, with matching exit codes and state counts.
-JFR recording also produced a nonempty recording file.
+Windows ARM64 is a compatibility package of the same AMD64 executable, tested
+with all six cases on a Windows 11 ARM64 runner under x64 emulation. It is not
+ARM64-native. The compatibility package includes those extra verification logs.
 
-Logs are included in the build kit. These checks cover the listed behaviors;
-they do not establish compatibility for every TLC feature or arbitrary Java
-extensions. See README.ja.md for scope and limitations.
+GitHub Actions publishes a release only after all native builds and the ARM64
+Windows compatibility job succeed. Release archives include logs from their
+build, source/toolchain metadata, licenses, and example models. Failed jobs
+upload their available logs as Actions artifacts.
+
+These tests verify the listed behaviors and do not prove every TLC feature or
+arbitrary Java extensions work. See README.md for limitations.

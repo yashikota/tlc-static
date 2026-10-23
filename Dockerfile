@@ -12,7 +12,8 @@ RUN microdnf install -y python3 binutils && microdnf clean all
 
 FROM bellsoft/liberica-native-image-kit-container@sha256:b531f62a40ca4217df6f39b2f7c171f4503406f3ea1273ef450e6f96b8a6afa2 AS toolchain-arm64
 ENV TLC_TOOLCHAIN=bellsoft/liberica-native-image-kit-container@sha256:b531f62a40ca4217df6f39b2f7c171f4503406f3ea1273ef450e6f96b8a6afa2
-RUN apk add --no-cache python3 binutils
+# python3 pulls in a newer zlib; keep its static library in step for linking.
+RUN apk add --no-cache python3 binutils zlib-static
 
 # Fetch pinned sources with a small, separate image.
 FROM alpine:3.22@sha256:2e0b81d60597f449baa56dc25d355367869d2dca4cd57e866f1e2b52af3eb55f AS source

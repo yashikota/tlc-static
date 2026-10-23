@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
-"""Build, test and package TLC on native GitHub Actions runners."""
+"""Build, test and package TLC.
+
+Linux targets run inside the Dockerfile's build stage; macOS and Windows run
+on native GitHub Actions runners with GraalVM installed.
+"""
 import argparse
 import hashlib
 import json
@@ -14,10 +18,7 @@ import zipfile
 
 ROOT = Path(__file__).resolve().parents[1]
 REV = '606dfa48298a1b36c4ee4625c705041c35bd7393'
-IMAGES = {
-    'linux-amd64': 'ghcr.io/graalvm/native-image-community@sha256:bd08fee5f6effb210e829f434e5b5341d9b5b321ddc47363a241853723c810eb',
-    'linux-arm64': 'bellsoft/liberica-native-image-kit-container@sha256:b531f62a40ca4217df6f39b2f7c171f4503406f3ea1273ef450e6f96b8a6afa2',
-}
+TARGETS = ['linux-amd64', 'linux-arm64', 'macos-arm64', 'windows-amd64']
 ANT = {
     'ant': '763acda4a69588c9ea8817a952851ff0c2fc4bffa1d081c2565dc407f29d5794',
     'ant-launcher': '5c8551990307a032336d98ddaed549a39a689f07d4d4c6b950601bf22b3d6a1b',
@@ -36,6 +37,8 @@ def run(command, *, cwd=ROOT, log=None):
 
 
 def download(url, path, digest=None):
+    if path.exists() and (not digest or hashlib.sha256(path.read_bytes()).hexdigest() == digest):
+        return
     path.parent.mkdir(parents=True, exist_ok=True)
     # urllib uses the runner's configured HTTPS proxy and certificate trust.
     with urllib.request.urlopen(url) as response, path.open('wb') as output:
@@ -46,7 +49,7 @@ def download(url, path, digest=None):
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument('--target', required=True, choices=[*IMAGES, 'macos-amd64', 'macos-arm64', 'windows-amd64'])
+    parser.add_argument('--target', required=True, choices=TARGETS)
     args = parser.parse_args()
     target = args.target
     linux = target.startswith('linux-')
@@ -54,32 +57,22 @@ def main():
     for directory in ['dist', 'tools', 'native-config', 'release', 'ci-logs']:
         (ROOT/directory).mkdir(exist_ok=True)
     logs = ROOT/'ci-logs'
-    if linux:
-        image = IMAGES[target]
-        run(['docker', 'pull', image])
-        docker = ['docker', 'run', '--rm', '--user', f'{os.getuid()}:{os.getgid()}',
-                  '-v', f'{ROOT}:/work', '-w', '/work']
 
-        def tool(name, *arguments, workdir=None, log=None):
-            return run(docker + (['-w', workdir] if workdir else []) +
-                       ['--entrypoint', name, image, *arguments], log=log)
+    def tool(name, *arguments, workdir=None, log=None):
+        executable = shutil.which(name)
+        if not executable:
+            raise RuntimeError(f'Missing tool: {name}')
+        return run([executable, *arguments], cwd=workdir or ROOT, log=log)
 
-        work = '/work'
-    else:
-        def tool(name, *arguments, workdir=None, log=None):
-            executable = shutil.which(name)
-            if not executable:
-                raise RuntimeError(f'Missing tool: {name}')
-            return run([executable, *arguments], cwd=workdir or ROOT, log=log)
+    work = ROOT.as_posix()
 
-        work = ROOT.as_posix()
-
-    if not (ROOT/'upstream/.git').is_dir():
+    # The Docker build supplies upstream/ from its source stage, without .git.
+    if not (ROOT/'upstream').is_dir():
         run(['git', 'init', 'upstream'])
         run(['git', '-C', 'upstream', 'remote', 'add', 'origin', 'https://github.com/tlaplus/tlaplus.git'])
         run(['git', '-C', 'upstream', 'fetch', '--depth', '1', 'origin', REV])
         run(['git', '-C', 'upstream', 'checkout', '--detach', 'FETCH_HEAD'])
-    if run(['git', '-C', 'upstream', 'rev-parse', 'HEAD']).strip() != REV:
+    if (ROOT/'upstream/.git').is_dir() and run(['git', '-C', 'upstream', 'rev-parse', 'HEAD']).strip() != REV:
         raise RuntimeError('Unexpected upstream revision')
     for artifact, digest in ANT.items():
         download(f'https://repo.maven.apache.org/maven2/org/apache/ant/{artifact}/1.10.15/{artifact}-1.10.15.jar',
@@ -93,8 +86,6 @@ def main():
     run([sys.executable, 'configure.py'])
 
     java = ['java', '-Xmx512m', '-cp', f'{work}/dist/tla2tools.jar', 'tlc2.TLC']
-    if linux:
-        java = docker + ['-w', '/work/tests', '--entrypoint', 'java', image, *java[1:]]
     run([sys.executable, 'verify.py', *java], log=logs/'jvm-verification.log')
     shutil.copytree(ROOT/'verification', logs/'jvm', dirs_exist_ok=True)
 
@@ -118,13 +109,6 @@ def main():
         if 'INTERP' in headers or '(NEEDED)' in dynamic:
             raise RuntimeError('Linux executable is not fully static')
         (logs/'linkage.log').write_text(headers+dynamic)
-        # Prove it runs with neither a JVM nor a dynamic loader present.
-        (ROOT/'dist/licenses').mkdir(exist_ok=True)
-        shutil.copy2(ROOT/'upstream/LICENSE', ROOT/'dist/licenses/tlaplus-LICENSE')
-        run(['docker', 'build', '-f', 'Dockerfile.scratch', '-t', 'tlc-scratch', '.'])
-        run(['docker', 'run', '--rm', '--tmpfs', '/tmp:rw,mode=1777', '-v',
-             f'{ROOT}/tests:/models', 'tlc-scratch', '-Xmx512m', '-workers', '2',
-             '-fpmem', '0.1', '-noGenerateSpecTE', 'Counter.tla'], log=logs/'scratch.log')
     elif windows:
         run(['dumpbin', '/headers', binary], log=logs/'headers.log')
         run(['dumpbin', '/dependents', binary], log=logs/'linkage.log')
@@ -137,7 +121,7 @@ def main():
         shutil.rmtree(stage)
     stage.mkdir()
     shutil.copy2(binary, stage/binary.name)
-    for name in ['README.md', 'README.ja.md', 'VERIFICATION.md', 'LICENSE', 'TLAplus-LICENSE.txt']:
+    for name in ['README.md', 'VERIFICATION.md', 'LICENSE', 'TLAplus-LICENSE.txt']:
         shutil.copy2(ROOT/name, stage/name)
     for name in ['examples', 'licenses', 'verification']:
         (stage/name).mkdir()
@@ -151,13 +135,12 @@ def main():
                      'tlatools/org.lamport.tlatools/src/org/apache/commons/math3/CommonsMath-NOTICE.txt']:
         path = ROOT/'upstream'/relative
         shutil.copy2(path, stage/'licenses'/path.name)
+    shutil.copytree(Path(os.environ['JAVA_HOME'])/'legal', stage/'licenses/java', symlinks=False)
     if linux:
-        tool('/bin/sh', '-ec', f'cp -rL "$JAVA_HOME/legal" /work/dist/{stage.name}/licenses/java')
-        download('https://raw.githubusercontent.com/ifduyue/musl/v1.2.5/COPYRIGHT', stage/'licenses/musl-COPYRIGHT')
-    else:
-        shutil.copytree(Path(os.environ['JAVA_HOME'])/'legal', stage/'licenses/java', symlinks=False)
+        download('https://raw.githubusercontent.com/ifduyue/musl/v1.2.5/COPYRIGHT', ROOT/'tools/musl-COPYRIGHT')
+        shutil.copy2(ROOT/'tools/musl-COPYRIGHT', stage/'licenses/musl-COPYRIGHT')
     metadata = dict(target=target, upstream=REV, fully_static=linux,
-                    toolchain=IMAGES[target] if linux else 'GraalVM CE 24.0.2',
+                    toolchain=os.environ.get('TLC_TOOLCHAIN', 'GraalVM CE 25.0.2'),
                     source_commit=os.environ.get('GITHUB_SHA', 'local'))
     (stage/'BUILD.json').write_text(json.dumps(metadata, indent=2)+'\n')
     checksum = hashlib.sha256(binary.read_bytes()).hexdigest()

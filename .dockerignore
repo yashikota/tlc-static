@@ -1,6 +1,10 @@
 *
-!dist/
-dist/*
-!dist/tlc
-!dist/licenses/
-!dist/licenses/**
+!ci/build.py
+!configure.py
+!verify.py
+!tests/*.tla
+!tests/*.cfg
+!README.md
+!VERIFICATION.md
+!LICENSE
+!TLAplus-LICENSE.txt

@@ -77,6 +77,8 @@ macOS and Windows binaries cannot be built in Docker. GitHub Actions builds them
 
 Versions follow upstream TLC: CalVer `YYYY.MM.DD.HHmmss`, taken from the pinned TLA+ commit time (UTC). `tlc` prints the same version.
 
+**Automatic:** once a day, [upstream.yml](.github/workflows/upstream.yml) checks the newest upstream TLA+ release. If it is new, it pins that commit on `main` and starts a release. You can also run it by hand from Actions.
+
 Easiest: **Actions → Build and release TLC → Run workflow**, on `main`, with "Create the tag and publish a release" checked. The tag is made for you.
 
 Or push the tag yourself:

@@ -18,11 +18,7 @@ Windows:
 .\tlc.exe -workers 2 -config Model.cfg Model.tla
 ```
 
-Try the bundled example:
-
-```sh
-./tlc -Xmx512m -workers 2 -fpmem 0.1 -noGenerateSpecTE examples/Counter.tla
-```
+Each archive has just `tlc` (or `tlc.exe`) and license files.
 
 ## Which file?
 
@@ -121,4 +117,4 @@ GitHub Actions then:
 
 - Build scripts: [MIT](LICENSE)
 - TLA+: [TLAplus-LICENSE.txt](TLAplus-LICENSE.txt)
-- Bundled dependencies: see `licenses/` in each archive.
+- Bundled dependencies: `THIRD-PARTY-NOTICES.txt` in each archive.

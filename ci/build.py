@@ -127,31 +127,24 @@ def main():
     if stage.exists():
         shutil.rmtree(stage)
     stage.mkdir()
+    # Archives hold only the executable and the licenses it must ship with.
     shutil.copy2(binary, stage/binary.name)
-    for name in ['README.md', 'VERIFICATION.md', 'LICENSE', 'TLAplus-LICENSE.txt']:
+    for name in ['LICENSE', 'TLAplus-LICENSE.txt']:
         shutil.copy2(ROOT/name, stage/name)
-    for name in ['examples', 'licenses', 'verification']:
-        (stage/name).mkdir()
-    for pattern in ['*.tla', '*.cfg']:
-        for path in (ROOT/'tests').glob(pattern):
-            shutil.copy2(path, stage/'examples'/path.name)
-    shutil.copytree(logs, stage/'verification', dirs_exist_ok=True)
-    for relative in ['LICENSE', 'tlatools/org.lamport.tlatools/lib/jline/jline-LICENSE.txt',
-                     'tlatools/org.lamport.tlatools/lib/gson/gson-LICENSE',
-                     'tlatools/org.lamport.tlatools/src/org/apache/commons/math3/CommonsMath-LICENSE.txt',
-                     'tlatools/org.lamport.tlatools/src/org/apache/commons/math3/CommonsMath-NOTICE.txt']:
-        path = ROOT/'upstream'/relative
-        shutil.copy2(path, stage/'licenses'/path.name)
-    shutil.copytree(Path(os.environ['JAVA_HOME'])/'legal', stage/'licenses/java', symlinks=False)
+    notices = [ROOT/'upstream/tlatools/org.lamport.tlatools'/relative for relative in [
+        'lib/jline/jline-LICENSE.txt', 'lib/gson/gson-LICENSE',
+        'src/org/apache/commons/math3/CommonsMath-LICENSE.txt',
+        'src/org/apache/commons/math3/CommonsMath-NOTICE.txt']]
+    legal = Path(os.environ['JAVA_HOME'])/'legal'
+    notices += sorted(path for path in legal.rglob('*') if path.is_file())
     if linux:
         download('https://raw.githubusercontent.com/ifduyue/musl/v1.2.5/COPYRIGHT', ROOT/'tools/musl-COPYRIGHT')
-        shutil.copy2(ROOT/'tools/musl-COPYRIGHT', stage/'licenses/musl-COPYRIGHT')
-    metadata = dict(target=target, version=VERSION, upstream=REV, fully_static=linux,
-                    toolchain=os.environ.get('TLC_TOOLCHAIN', 'GraalVM CE 25.0.2'),
-                    source_commit=os.environ.get('GITHUB_SHA', 'local'))
-    (stage/'BUILD.json').write_text(json.dumps(metadata, indent=2)+'\n')
-    checksum = hashlib.sha256(binary.read_bytes()).hexdigest()
-    (stage/'SHA256SUMS').write_text(f'{checksum}  {binary.name}\n')
+        notices.append(ROOT/'tools/musl-COPYRIGHT')
+    with (stage/'THIRD-PARTY-NOTICES.txt').open('w', encoding='utf-8', newline='\n') as output:
+        for path in notices:
+            name = path.relative_to(legal.parent) if path.is_relative_to(legal) else path.name
+            output.write(f'{"=" * 72}\n{name}\n{"=" * 72}\n\n')
+            output.write(path.read_text(encoding='utf-8', errors='replace').rstrip()+'\n\n')
     destination = ROOT/'release'/stage.name
     if windows:
         shutil.make_archive(str(destination), 'zip', root_dir=stage)

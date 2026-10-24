@@ -98,14 +98,12 @@ jobs:
         with:
           name: release-windows-amd64
           path: incoming
-      - name: Verify x64 TLC on ARM64 Windows and package compatibility build
+      - name: Verify x64 TLC on ARM64 Windows and package it
         shell: pwsh
         run: |
           Expand-Archive incoming/tlc-windows-amd64.zip -DestinationPath arm-package
           python verify.py "$PWD/arm-package/tlc.exe" -Xmx512m
           if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
-          Copy-Item verification arm-package/verification/windows-arm64 -Recurse
-          'This package contains the AMD64 executable, tested on Windows 11 ARM64 using Windows x64 emulation. It is not an ARM64-native executable. No Java installation is required.' | Set-Content arm-package/COMPATIBILITY.txt
           New-Item release -ItemType Directory -Force
           Compress-Archive arm-package/* release/tlc-windows-arm64-emulated.zip
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
@@ -175,4 +173,4 @@ jobs:
 
             Windows ARM64 package contains the AMD64 executable; it is explicitly not ARM64-native. macOS and Windows binaries are not fully static. All packages run without a Java installation.
 
-            Each native build passes six JVM/native comparison cases, including safety, liveness, simulation, DFID, and Bakery. Linux packages additionally pass ELF static-link checks and a scratch-container test. Archives include licenses, example models, build metadata, and verification logs. SHA256SUMS covers every archive.
+            Each native build passes six JVM/native comparison cases, including safety, liveness, simulation, DFID, and Bakery. Linux packages additionally pass ELF static-link checks and a scratch-container test. Archives contain only the executable and its licenses (THIRD-PARTY-NOTICES.txt covers bundled dependencies). Build and test logs are kept as Actions artifacts. SHA256SUMS covers every archive.

@@ -133,6 +133,7 @@ jobs:
         id: tag
         run: |
           version=$(cd ci && python3 -c 'import build; print(build.VERSION)')
+          echo "rev=$(cd ci && python3 -c 'import build; print(build.REV)')" >> "$GITHUB_OUTPUT"
           tag="v$version"
           if [[ "$GITHUB_REF" == refs/tags/* && "$GITHUB_REF_NAME" != "$tag" ]]; then
             echo "::error::Tag $GITHUB_REF_NAME does not match version $tag"
@@ -164,7 +165,7 @@ jobs:
           fail_on_unmatched_files: true
           files: release/*
           body: |
-            JVM-free TLC ${{ steps.tag.outputs.name }}, built and tested by GitHub Actions from pinned TLA+ source 606dfa48298a1b36c4ee4625c705041c35bd7393. The version uses the same CalVer scheme as upstream TLC.
+            JVM-free TLC ${{ steps.tag.outputs.name }}, built and tested by GitHub Actions from pinned TLA+ source ${{ steps.tag.outputs.rev }}. The version uses the same CalVer scheme as upstream TLC.
 
             | Platform | AMD64 | ARM64 |
             | --- | --- | --- |

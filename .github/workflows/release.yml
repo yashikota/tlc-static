@@ -141,7 +141,7 @@ jobs:
           fail_on_unmatched_files: true
           files: release/*
           body: |
-            JVM-free TLC built and tested by GitHub Actions from pinned TLA+ source 606dfa48298a1b36c4ee4625c705041c35bd7393.
+            JVM-free TLC ${{ github.ref_name }}, built and tested by GitHub Actions from pinned TLA+ source 606dfa48298a1b36c4ee4625c705041c35bd7393. The version uses the same CalVer scheme as upstream TLC.
 
             | Platform | AMD64 | ARM64 |
             | --- | --- | --- |

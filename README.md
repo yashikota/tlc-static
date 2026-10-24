@@ -75,11 +75,13 @@ macOS and Windows binaries cannot be built in Docker. GitHub Actions builds them
 
 ## Release
 
+Versions follow upstream TLC: CalVer `YYYY.MM.DD.HHmmss`, taken from the pinned TLA+ commit time (UTC). `tlc` prints the same version.
+
 Push a tag:
 
 ```sh
-git tag v0.1.2
-git push origin v0.1.2
+git tag v2026.10.23.034533
+git push origin v2026.10.23.034533
 ```
 
 GitHub Actions then:

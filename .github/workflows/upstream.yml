@@ -1,0 +1,57 @@
+name: Follow upstream TLA+ releases
+
+# Upstream publishes every master build as a rolling GitHub release.
+# Once a day, pin the commit behind the newest one and release it.
+on:
+  schedule:
+    - cron: '17 3 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: upstream
+  cancel-in-progress: false
+
+jobs:
+  bump:
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: write
+      actions: write
+    steps:
+      # GitHub disables schedules after 60 days without repository activity.
+      # Re-enabling the workflow on every run resets that timer.
+      - name: Keep schedule alive
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh api -X PUT "repos/$GITHUB_REPOSITORY/actions/workflows/upstream.yml/enable"
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
+        with:
+          ref: main
+      - name: Find newest upstream release
+        id: upstream
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          tag=$(gh api repos/tlaplus/tlaplus/releases?per_page=1 -q '.[0].tag_name')
+          sha=$(git ls-remote https://github.com/tlaplus/tlaplus.git "refs/tags/$tag" "refs/tags/$tag^{}" | sort -k2,2r | head -1 | cut -f1)
+          echo "Upstream $tag is $sha"
+          echo "sha=$sha" >> "$GITHUB_OUTPUT"
+      - name: Pin it
+        id: bump
+        env:
+          TZ: UTC
+        run: echo "version=$(python3 ci/bump_upstream.py '${{ steps.upstream.outputs.sha }}')" >> "$GITHUB_OUTPUT"
+      - name: Commit and start the release
+        if: steps.bump.outputs.version != ''
+        env:
+          GH_TOKEN: ${{ github.token }}
+          VERSION: ${{ steps.bump.outputs.version }}
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git commit -am "Follow upstream TLA+ $VERSION"
+          git push origin HEAD:main
+          gh workflow run release.yml --ref main -f release=true

@@ -33,7 +33,8 @@ def main():
     # format-local uses TZ, which the caller sets to UTC.
     old_version = build.VERSION
     version = stamp[:10].replace('-', '.') + '.' + stamp[11:].replace(':', '')
-    for name in git('grep', '-l', '-e', build.REV, '-e', old_version).split():
+    # Workflow files are left alone: GITHUB_TOKEN may not push changes to them.
+    for name in git('grep', '-l', '-e', build.REV, '-e', old_version, '--', '.', ':!.github/workflows').split():
         path = ROOT/name
         text = path.read_text(encoding='utf-8')
         text = text.replace(build.REV, rev).replace(old_version, version)

@@ -17,8 +17,8 @@ counters or postconditions. Each build must pass all cases, and JVM/native
 results must match, before it can be uploaded for publication.
 
 Linux amd64 and arm64 must additionally have no ELF INTERP or NEEDED entries,
-and must run Counter in a FROM scratch container as UID 1000 with writable
-/tmp and a model directory. No JVM, libc shared library, or dynamic loader is
+and must run Counter in a FROM scratch container with writable /tmp and a
+mounted model directory. Linux builds run entirely inside Docker. No JVM, libc shared library, or dynamic loader is
 copied into that image. macOS dependencies are recorded with otool; Windows
 imports are recorded with dumpbin. These two operating systems use system
 libraries and are not described as fully static.

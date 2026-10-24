@@ -25,28 +25,44 @@ jobs:
             runner: ubuntu-24.04
           - target: linux-arm64
             runner: ubuntu-24.04-arm
-          - target: macos-amd64
-            runner: macos-15-intel
           - target: macos-arm64
             runner: macos-15
           - target: windows-amd64
             runner: windows-2022
     steps:
       - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
+      # Linux: everything runs inside Docker (see Dockerfile).
+      - name: Build in Docker
+        if: runner.os == 'Linux'
+        run: |
+          docker build --progress=plain --build-arg SOURCE_COMMIT="$GITHUB_SHA" --output out .
+          mv out/release out/ci-logs .
+      - name: Smoke test FROM scratch image
+        if: runner.os == 'Linux'
+        shell: bash
+        run: |
+          docker build --build-arg SOURCE_COMMIT="$GITHUB_SHA" --target runtime -t tlc-static .
+          # Run as the runner user so TLC can write states/ into the mounted model directory.
+          docker run --rm --user "$(id -u):$(id -g)" --tmpfs /tmp:rw,mode=1777 \
+            -v "$PWD/tests:/models" tlc-static \
+            -Xmx512m -workers 2 -fpmem 0.1 -noGenerateSpecTE Counter.tla | tee ci-logs/scratch.log
+      # macOS and Windows: native toolchains (Docker cannot build these).
       - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
+        if: runner.os != 'Linux'
         with:
           python-version: '3.12'
       - uses: graalvm/setup-graalvm@27b360dbb857524eaf0b4c4cef364d38e5b4f173 # v1
         if: runner.os != 'Linux'
         with:
           distribution: graalvm-community
-          java-version: '24.0.2'
+          java-version: '25.0.2'
           github-token: ${{ secrets.GITHUB_TOKEN }}
       - uses: ilammy/msvc-dev-cmd@0b201ec74fa43914dc39ae48a89fd1d8cb592756 # v1
         if: runner.os == 'Windows'
         with:
           arch: x64
-      - name: Build, compare with JVM, verify linkage, package
+      - name: Build, compare with JVM, check linkage, package
+        if: runner.os != 'Linux'
         run: python ci/build.py --target ${{ matrix.target }}
       - name: Upload release archive
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
@@ -116,7 +132,6 @@ jobs:
         run: |
           test -f tlc-linux-amd64.tar.gz
           test -f tlc-linux-arm64.tar.gz
-          test -f tlc-macos-amd64.tar.gz
           test -f tlc-macos-arm64.tar.gz
           test -f tlc-windows-amd64.zip
           test -f tlc-windows-arm64-emulated.zip
@@ -131,7 +146,7 @@ jobs:
             | Platform | AMD64 | ARM64 |
             | --- | --- | --- |
             | Linux | Fully static musl | Fully static musl (Liberica NIK) |
-            | macOS | Native, system libraries | Native, system libraries |
+            | macOS | Not provided | Native (Apple Silicon), system libraries |
             | Windows | Native x64, Windows libraries | x64 emulation, tested on Windows 11 ARM64 |
 
             Windows ARM64 package contains the AMD64 executable; it is explicitly not ARM64-native. macOS and Windows binaries are not fully static. All packages run without a Java installation.

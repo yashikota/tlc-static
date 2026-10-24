@@ -18,6 +18,10 @@ import zipfile
 
 ROOT = Path(__file__).resolve().parents[1]
 REV = '606dfa48298a1b36c4ee4625c705041c35bd7393'
+# Commit time of REV (UTC). TLC derives its CalVer version from the build
+# timestamp, so pinning it makes every platform report the same version.
+REV_TIME = '2026-10-23T03:45:33'
+VERSION = REV_TIME[:10].replace('-', '.') + '.' + REV_TIME[11:].replace(':', '')
 TARGETS = ['linux-amd64', 'linux-arm64', 'macos-arm64', 'windows-amd64']
 ANT = {
     'ant': '763acda4a69588c9ea8817a952851ff0c2fc4bffa1d081c2565dc407f29d5794',
@@ -81,6 +85,7 @@ def main():
     source = 'upstream/tlatools/org.lamport.tlatools'
     tool('java', '-cp', f'{work}/tools/*', 'org.apache.tools.ant.Main', '-f', 'customBuild.xml',
          f'-Dgit.revision={REV}', f'-Dgit.shortRevision={REV[:7]}', '-Dgit.branch=master',
+         f'-DISO8601={REV_TIME}.0Z', f'-DTODAY={REV_TIME[:10]}',
          'compile', 'compile-test', 'dist', workdir=f'{work}/{source}', log=logs/'ant.log')
     shutil.copy2(ROOT/source/'dist/tla2tools.jar', ROOT/'dist/tla2tools.jar')
     run([sys.executable, 'configure.py'])
@@ -98,6 +103,8 @@ def main():
         options = ['--static', '--libc=musl', *options]
     tool('native-image', *options, log=logs/'native-build.log')
     run([sys.executable, 'verify.py'], log=logs/'native-verification.log')
+    if f'Version {VERSION}' not in (ROOT/'verification/success.log').read_text(encoding='utf-8'):
+        raise RuntimeError(f'Native TLC does not report version {VERSION}')
     shutil.copytree(ROOT/'verification', logs/'native', dirs_exist_ok=True)
     if json.loads((logs/'jvm/results.json').read_text()) != json.loads((logs/'native/results.json').read_text()):
         raise RuntimeError('JVM/native results differ')
@@ -139,7 +146,7 @@ def main():
     if linux:
         download('https://raw.githubusercontent.com/ifduyue/musl/v1.2.5/COPYRIGHT', ROOT/'tools/musl-COPYRIGHT')
         shutil.copy2(ROOT/'tools/musl-COPYRIGHT', stage/'licenses/musl-COPYRIGHT')
-    metadata = dict(target=target, upstream=REV, fully_static=linux,
+    metadata = dict(target=target, version=VERSION, upstream=REV, fully_static=linux,
                     toolchain=os.environ.get('TLC_TOOLCHAIN', 'GraalVM CE 25.0.2'),
                     source_commit=os.environ.get('GITHUB_SHA', 'local'))
     (stage/'BUILD.json').write_text(json.dumps(metadata, indent=2)+'\n')

@@ -1,6 +1,6 @@
 # tlc-static
 
-**TLA+ TLC as a single executable. No Java needed.**
+**Native, JVM-free TLA+ TLC. Fully static on Linux, updated daily from upstream.**
 
 ## Quick start
 

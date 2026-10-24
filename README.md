@@ -77,12 +77,16 @@ macOS and Windows binaries cannot be built in Docker. GitHub Actions builds them
 
 Versions follow upstream TLC: CalVer `YYYY.MM.DD.HHmmss`, taken from the pinned TLA+ commit time (UTC). `tlc` prints the same version.
 
-Push a tag:
+Easiest: **Actions → Build and release TLC → Run workflow**, on `main`, with "Create the tag and publish a release" checked. The tag is made for you.
+
+Or push the tag yourself:
 
 ```sh
 git tag v2026.10.23.034533
 git push origin v2026.10.23.034533
 ```
+
+The tag must match the version in `ci/build.py`, or the release stops.
 
 GitHub Actions then:
 

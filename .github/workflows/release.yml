@@ -4,6 +4,11 @@ on:
   push:
     tags: ['v*']
   workflow_dispatch:
+    inputs:
+      release:
+        description: Create the tag and publish a release (main only)
+        type: boolean
+        default: false
 
 permissions:
   contents: read
@@ -117,11 +122,27 @@ jobs:
   release:
     name: Publish GitHub Release
     needs: [build, windows-arm64]
-    if: startsWith(github.ref, 'refs/tags/v')
+    if: startsWith(github.ref, 'refs/tags/v') || (inputs.release && github.ref == 'refs/heads/main')
     runs-on: ubuntu-24.04
     permissions:
       contents: write
     steps:
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
+      # The tag is the CalVer version that ci/build.py pins and verifies.
+      - name: Pick release tag
+        id: tag
+        run: |
+          version=$(cd ci && python3 -c 'import build; print(build.VERSION)')
+          tag="v$version"
+          if [[ "$GITHUB_REF" == refs/tags/* && "$GITHUB_REF_NAME" != "$tag" ]]; then
+            echo "::error::Tag $GITHUB_REF_NAME does not match version $tag"
+            exit 1
+          fi
+          if [[ "$GITHUB_REF" != refs/tags/* ]] && git ls-remote --exit-code --tags origin "$tag" >/dev/null; then
+            echo "::error::Tag $tag already exists"
+            exit 1
+          fi
+          echo "name=$tag" >> "$GITHUB_OUTPUT"
       - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4
         with:
           pattern: release-*
@@ -138,10 +159,12 @@ jobs:
           sha256sum *.tar.gz *.zip > SHA256SUMS
       - uses: softprops/action-gh-release@3bb12739c298aeb8a4eeaf626c5b8d85266b0e65 # v2
         with:
+          tag_name: ${{ steps.tag.outputs.name }}
+          target_commitish: ${{ github.sha }}
           fail_on_unmatched_files: true
           files: release/*
           body: |
-            JVM-free TLC ${{ github.ref_name }}, built and tested by GitHub Actions from pinned TLA+ source 606dfa48298a1b36c4ee4625c705041c35bd7393. The version uses the same CalVer scheme as upstream TLC.
+            JVM-free TLC ${{ steps.tag.outputs.name }}, built and tested by GitHub Actions from pinned TLA+ source 606dfa48298a1b36c4ee4625c705041c35bd7393. The version uses the same CalVer scheme as upstream TLC.
 
             | Platform | AMD64 | ARM64 |
             | --- | --- | --- |

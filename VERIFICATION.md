@@ -25,12 +25,12 @@ libraries and are not described as fully static.
 
 Windows ARM64 is a compatibility package of the same AMD64 executable, tested
 with all six cases on a Windows 11 ARM64 runner under x64 emulation. It is not
-ARM64-native. The compatibility package includes those extra verification logs.
+ARM64-native.
 
 GitHub Actions publishes a release only after all native builds and the ARM64
-Windows compatibility job succeed. Release archives include logs from their
-build, source/toolchain metadata, licenses, and example models. Failed jobs
-upload their available logs as Actions artifacts.
+Windows compatibility job succeed. Release archives contain only the
+executable and its licenses. Every job, passing or failing, uploads its logs
+as Actions artifacts.
 
 These tests verify the listed behaviors and do not prove every TLC feature or
 arbitrary Java extensions work. See README.md for limitations.

@@ -49,7 +49,7 @@ RUN GITHUB_SHA="$SOURCE_COMMIT" python3 ci/build.py --target "linux-$TARGETARCH"
 # Minimal image: just the static binary and its licenses.
 FROM scratch AS runtime
 COPY --from=build /stage/tlc /tlc
-COPY --from=build /stage/licenses /licenses
+COPY --from=build /stage/LICENSE /stage/TLAplus-LICENSE.txt /stage/THIRD-PARTY-NOTICES.txt /licenses/
 WORKDIR /models
 USER 1000:1000
 ENTRYPOINT ["/tlc"]

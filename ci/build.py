@@ -17,10 +17,10 @@ import urllib.request
 import zipfile
 
 ROOT = Path(__file__).resolve().parents[1]
-REV = '2ef2af8c767b76e5db5cba2878f027ac07aad36c'
+REV = 'fad899c74ca87a38322c1a0fc4a7d72a7a0fba33'
 # Commit time of REV (UTC). TLC derives its CalVer version from the build
 # timestamp, so pinning it makes every platform report the same version.
-REV_TIME = '2026-10-23T13:41:25'
+REV_TIME = '2026-10-26T22:58:17'
 VERSION = REV_TIME[:10].replace('-', '.') + '.' + REV_TIME[11:].replace(':', '')
 TARGETS = ['linux-amd64', 'linux-arm64', 'macos-arm64', 'windows-amd64']
 ANT = {

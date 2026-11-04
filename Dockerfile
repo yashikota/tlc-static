@@ -4,7 +4,7 @@
 #   docker build --target runtime -t tlc-static .  # FROM scratch image
 # The toolchain is chosen from the build platform's CPU (amd64 or arm64).
 
-ARG TLA_REV=dc6a944429fe3e26104d38f9ff792d2d5d83f307
+ARG TLA_REV=309e489a512e8017f1cdc8388fa6a5e8a01cf597
 
 FROM ghcr.io/graalvm/native-image-community@sha256:bd08fee5f6effb210e829f434e5b5341d9b5b321ddc47363a241853723c810eb AS toolchain-amd64
 ENV TLC_TOOLCHAIN=ghcr.io/graalvm/native-image-community@sha256:bd08fee5f6effb210e829f434e5b5341d9b5b321ddc47363a241853723c810eb

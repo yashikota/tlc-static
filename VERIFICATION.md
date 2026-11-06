@@ -1,6 +1,6 @@
 # Release verification
 
-Each native build uses TLA+ source commit 309e489a512e8017f1cdc8388fa6a5e8a01cf597.
+Each native build uses TLA+ source commit 3ec1cc4f8c24fca53ce16f2bb254d91e9337af49.
 The same JAR is tested on the JVM before building the native executable.
 
 | Case | Required result |

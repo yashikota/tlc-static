@@ -80,8 +80,8 @@ Easiest: **Actions → Build and release TLC → Run workflow**, on `main`, with
 Or push the tag yourself:
 
 ```sh
-git tag v2026.11.06.220854
-git push origin v2026.11.06.220854
+git tag v2026.11.15.000518
+git push origin v2026.11.15.000518
 ```
 
 The tag must match the version in `ci/build.py`, or the release stops.
@@ -100,7 +100,7 @@ GitHub Actions then:
 
 ## Pinned inputs
 
-- TLA+ source: `d8fb231de4e4b5d02c1b2ed1ac759c086f694021` (no patches)
+- TLA+ source: `bc1b506bdcad80bb518bf3776a9161c34ff0fc4c` (no patches)
 - Linux amd64: GraalVM CE 25.0.2 + musl (image digest pinned)
 - Linux arm64: Liberica NIK 25 + musl (image digest pinned)
 - macOS / Windows: GraalVM CE 25.0.2
